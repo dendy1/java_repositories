@@ -1,6 +1,5 @@
 package org.nebezdari.repositories;
 
-
 import org.nebezdari.contracts.Contract;
 
 import java.util.Optional;
@@ -33,7 +32,7 @@ public class ContractRepository implements IRepository<Contract> {
 
     @Override
     public void add(Contract item) {
-        if (size() == contracts.length + 1) {
+        if (pointer == contracts.length) {
             resize_array(contracts.length * RESIZE_RATE);
         }
 
