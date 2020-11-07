@@ -142,10 +142,13 @@ public class ContractRepository implements IRepository<Contract> {
      * Функция для изменения элемента репозитория
      * @param index Индекс элемента репозитория, который нужно заменить
      * @param item Контракт, который заменит существующий элемент
+     * @return возвращает заменённый контракт
      */
     @Override
     public Contract set(int index, Contract item) {
-        return contracts[index] = item;
+        Contract old = contracts[index];
+        contracts[index] = item;
+        return old;
     }
 
     /**
