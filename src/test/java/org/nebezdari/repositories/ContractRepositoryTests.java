@@ -4,9 +4,12 @@ import org.junit.*;
 import org.nebezdari.Gender;
 import org.nebezdari.Person;
 import org.nebezdari.contracts.*;
+import org.nebezdari.sorters.QuickSorter;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -240,5 +243,62 @@ public class ContractRepositoryTests {
 
         repository.add(internetContract);
         repository.set(1, mobileContract);
+    }
+
+
+    /**
+     * Метод для тестирования корректности поиска первого элемента репозитория по заданному условию
+     */
+    @Test
+    public void testFindFirstContractByID() {
+        Contract internetContract = createInternetContract(); // ID = 1
+        Contract mobileContract = createMobileContract();     // ID = 2
+        Contract tvContract = createTVContract();             // ID = 3
+
+        repository.add(internetContract);
+        repository.add(mobileContract);
+        repository.add(tvContract);
+
+        assertEquals(mobileContract, repository.findFirst(
+                contract -> contract.getId() == 2
+        ).get());
+    }
+
+
+    /**
+     * Метод для тестирования корректности поиска всех элементов репозитория по заданному условию
+     */
+    @Test
+    public void testFindAllContractByID() {
+        Contract internetContract = createInternetContract();
+        Contract mobileContract = createMobileContract();
+        Contract tvContract = createTVContract();
+
+        repository.add(internetContract);
+        repository.add(mobileContract);
+        repository.add(tvContract);
+
+        assertArrayEquals(new Contract[] {mobileContract, tvContract}, repository.findAll(
+                contract -> contract.getId() > 1
+        ));
+    }
+
+
+    /**
+     * Метод для тестирования корректности сортировки элементов репозитория по ID контракта
+     */
+    @Test
+    public void testSortContractByID() {
+        Contract internetContract = createInternetContract();
+        Contract mobileContract = createMobileContract();
+        Contract tvContract = createTVContract();
+
+        repository.add(internetContract);
+        repository.add(mobileContract);
+        repository.add(tvContract);
+
+        repository.sort(new QuickSorter(), Comparator.comparing(Contract::getId));
+
+        assertArrayEquals(new Contract[] {tvContract, mobileContract, internetContract}, repository.getAll());
     }
 }

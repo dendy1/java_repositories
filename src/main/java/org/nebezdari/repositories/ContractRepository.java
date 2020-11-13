@@ -1,8 +1,12 @@
 package org.nebezdari.repositories;
 
 import org.nebezdari.contracts.Contract;
+import org.nebezdari.sorters.*;
 
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 /** Класс для инкапсуляции в себе объектов класса Контракт {@link Contract} */
 public class ContractRepository implements IRepository<Contract> {
@@ -178,5 +182,38 @@ public class ContractRepository implements IRepository<Contract> {
     @Override
     public boolean isEmpty() {
         return pointer < 1;
+    }
+
+    /**
+     * Функция для получения сортировки элементов репозитория
+     * @param sorter Класс сортировщика
+     * @param comparator Класс компаратора с условием сравнения объектов для сортировки
+     */
+    public void sort(ISorter sorter, Comparator<Contract> comparator) {
+        sorter.sort(contracts, pointer, comparator);
+    }
+
+    /**
+     * Функция для поиска первого контракта в репозитории, удовлетворяющего заданному условию
+     * @param predicate Предикат, по которому будет осущетсвляться поиск
+     * @return возвращает объект Optional с найденным контрактом внутри, либо же пустой Optional, если по указанному условию контракта не нашлось.
+     */
+    public Optional<Contract> findFirst(Predicate<Contract> predicate) {
+        for (int i = 0; i < pointer; i++) {
+            if (predicate.test(contracts[i])) {
+                return Optional.of(contracts[i]);
+            }
+        }
+
+        return Optional.empty();
+    }
+
+    /**
+     * ункция для поиска всех контрактов в репозитории, удовлетворяющих заданному условию
+     * @param predicate Предикат, по которому будет осущетсвляться поиск
+     * @return возвращает массив объектов найденны контрактов, либо же пустой массив, если по указанному условию контрактов не нашлось.
+     */
+    public Contract[] findAll(Predicate<Contract> predicate) {
+        return Arrays.stream(contracts).limit(pointer).filter(predicate).toArray(Contract[]::new);
     }
 }
