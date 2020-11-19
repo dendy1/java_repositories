@@ -4,8 +4,11 @@ import org.nebezdari.contracts.InternetContract;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class Person {
+    public static AtomicLong atomicLong = new AtomicLong();
+
     /** Поле ID человека */
     private Long id;
 

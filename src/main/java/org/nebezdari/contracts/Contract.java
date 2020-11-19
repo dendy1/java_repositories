@@ -3,9 +3,12 @@ package org.nebezdari.contracts;
 import org.nebezdari.Person;
 
 import java.time.LocalDate;
+import java.util.concurrent.atomic.AtomicLong;
 
 /** Абстрактный класс, содержащий общую информацию для всех контрактов. */
 public abstract class Contract {
+    public static AtomicLong atomicLong = new AtomicLong();
+
     /** Поле ID */
     private Long id;
 
