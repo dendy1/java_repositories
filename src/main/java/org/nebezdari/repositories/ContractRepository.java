@@ -24,6 +24,9 @@ public class ContractRepository implements IRepository<Contract> {
     /** Внутренний массив, в котором хранятся элементы */
     private Contract[] contracts = new Contract[DEFAULT_CAPACITY];
 
+    /** Класс сортировщика для сортировки */
+    private ISorter sorter = new QuickSorter();
+
     /** Указатель на последний элемент массива */
     private int pointer = 0;
 
@@ -186,10 +189,9 @@ public class ContractRepository implements IRepository<Contract> {
 
     /**
      * Функция для получения сортировки элементов репозитория
-     * @param sorter Класс сортировщика
      * @param comparator Класс компаратора с условием сравнения объектов для сортировки
      */
-    public void sort(ISorter sorter, Comparator<Contract> comparator) {
+    public void sort(Comparator<Contract> comparator) {
         sorter.sort(contracts, pointer, comparator);
     }
 
@@ -209,11 +211,27 @@ public class ContractRepository implements IRepository<Contract> {
     }
 
     /**
-     * ункция для поиска всех контрактов в репозитории, удовлетворяющих заданному условию
+     * Функция для поиска всех контрактов в репозитории, удовлетворяющих заданному условию
      * @param predicate Предикат, по которому будет осущетсвляться поиск
      * @return возвращает массив объектов найденны контрактов, либо же пустой массив, если по указанному условию контрактов не нашлось.
      */
     public Contract[] findAll(Predicate<Contract> predicate) {
         return Arrays.stream(contracts).limit(pointer).filter(predicate).toArray(Contract[]::new);
+    }
+
+    /**
+     * Функция получения значения поля {@link ContractRepository#sorter}
+     * @return возвращает Объект сортировщика
+     */
+    public ISorter getSorter(ISorter sorter) {
+        return this.sorter;
+    }
+
+    /**
+     * Функция определения Объекта сортировщика {@link ContractRepository#sorter}
+     * @param sorter Объект сортировщика
+     */
+    public void setSorter(ISorter sorter) {
+        this.sorter = sorter;
     }
 }

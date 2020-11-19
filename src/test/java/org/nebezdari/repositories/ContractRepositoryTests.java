@@ -297,7 +297,7 @@ public class ContractRepositoryTests {
         repository.add(mobileContract);
         repository.add(tvContract);
 
-        repository.sort(new QuickSorter(), Comparator.comparing(Contract::getId));
+        repository.sort(Comparator.comparing(Contract::getId));
 
         assertArrayEquals(new Contract[] {tvContract, mobileContract, internetContract}, repository.getAll());
     }
