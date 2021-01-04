@@ -1,8 +1,7 @@
 package org.nebezdari;
 
-import com.opencsv.exceptions.CsvValidationException;
 import org.junit.*;
-import org.nebezdari.IO.ContractRepositoryCSVReader;
+import org.nebezdari.IO.ContractCSVParser;
 import org.nebezdari.contracts.Contract;
 import org.nebezdari.repositories.ContractRepository;
 
@@ -36,7 +35,8 @@ public class CSVReaderTests {
         String filename = "C:/contracts.csv";
 
         try {
-            ContractRepositoryCSVReader.Read(filename, repository);
+            ContractCSVParser csvParser = new ContractCSVParser();
+            csvParser.fromFileToRepository(repository, filename);
 
             for (Contract c: repository.getAll()) {
                 System.out.println(c);
@@ -44,7 +44,7 @@ public class CSVReaderTests {
 
             assertEquals(3, repository.size());
         }
-        catch (IOException | CsvValidationException ignored) {
+        catch (IOException ignored) {
 
         }
     }

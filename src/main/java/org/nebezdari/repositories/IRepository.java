@@ -1,7 +1,9 @@
 package org.nebezdari.repositories;
 
 
-import java.util.Collection;
+import java.util.Comparator;
+import java.util.Optional;
+import java.util.function.Predicate;
 
 public interface IRepository<T> {
     void add(T item);
@@ -12,4 +14,7 @@ public interface IRepository<T> {
     T[] getAll();
     int size();
     boolean isEmpty();
+    void sort(Comparator<T> comparator);
+    Optional<T> findFirst(Predicate<T> predicate);
+    T[] findAll(Predicate<T> predicate);
 }
