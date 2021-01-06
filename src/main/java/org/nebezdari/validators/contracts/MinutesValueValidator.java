@@ -7,10 +7,14 @@ import org.nebezdari.validators.IValidator;
 import org.nebezdari.validators.Message;
 import org.nebezdari.validators.Status;
 
-public class MinutesValidator implements IValidator<Contract> {
+public class MinutesValueValidator implements IValidator<Contract> {
 
     @Override
     public Message validate(Contract objectForValidate) {
+        if (!objectForValidate.getClass().equals(getAppliableFor())) {
+            return new Message(Status.ERROR, "Incorrect validation");
+        }
+
         MobileContract mobileContract = (MobileContract)objectForValidate;
 
         if (mobileContract.getMinutesTraffic() < 0) {
@@ -25,6 +29,6 @@ public class MinutesValidator implements IValidator<Contract> {
 
     @Override
     public Class<? extends Contract> getAppliableFor() {
-        return InternetContract.class;
+        return MobileContract.class;
     }
 }

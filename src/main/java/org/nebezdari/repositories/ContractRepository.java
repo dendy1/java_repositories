@@ -1,5 +1,6 @@
 package org.nebezdari.repositories;
 
+import org.nebezdari.DI.AutoInjectable;
 import org.nebezdari.contracts.Contract;
 import org.nebezdari.sorters.*;
 
@@ -25,6 +26,7 @@ public class ContractRepository implements IRepository<Contract> {
     private Contract[] contracts = new Contract[DEFAULT_CAPACITY];
 
     /** Класс сортировщика для сортировки */
+    @AutoInjectable
     private ISorter sorter = new QuickSorter();
 
     /** Указатель на последний элемент массива */
@@ -117,6 +119,7 @@ public class ContractRepository implements IRepository<Contract> {
      */
     @Override
     public void clear() {
+        pointer = 0;
         contracts = new Contract[DEFAULT_CAPACITY];
     }
 
@@ -152,7 +155,11 @@ public class ContractRepository implements IRepository<Contract> {
      * @return возвращает заменённый контракт
      */
     @Override
-    public Contract set(int index, Contract item) {
+    public Contract set(int index, Contract item) throws ArrayIndexOutOfBoundsException {
+        if (index < 0 || index > pointer - 1) {
+            throw new ArrayIndexOutOfBoundsException();
+        }
+
         Contract old = contracts[index];
         contracts[index] = item;
         return old;

@@ -5,6 +5,7 @@ import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvValidationException;
+import org.nebezdari.DI.AutoInjectable;
 import org.nebezdari.Gender;
 import org.nebezdari.Person;
 import org.nebezdari.contracts.*;
@@ -12,8 +13,11 @@ import org.nebezdari.repositories.IRepository;
 import org.nebezdari.validators.IValidator;
 import org.nebezdari.validators.Message;
 import org.nebezdari.validators.Status;
-import org.nebezdari.validators.contracts.MinutesValidator;
+import org.nebezdari.validators.contracts.MinutesValueValidator;
+import org.nebezdari.validators.contracts.SpeedValueValidator;
+import org.nebezdari.validators.person.FullNameValueValidator;
 
+import javax.xml.validation.Validator;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
@@ -31,8 +35,11 @@ public class ContractCSVParser implements IParser<Contract> {
 
     private static final List<IValidator<Contract>> contractValidatorList = new ArrayList<>();
     private static final List<IValidator<Person>> personValidatorList = new ArrayList<>();
+
     static {
-        contractValidatorList.add(new MinutesValidator());
+        contractValidatorList.add(new MinutesValueValidator());
+        contractValidatorList.add(new SpeedValueValidator());
+        personValidatorList.add(new FullNameValueValidator());
     }
 
     private Boolean personValidation = true;
@@ -66,13 +73,15 @@ public class ContractCSVParser implements IParser<Contract> {
         return true;
     }
 
-
     private <T extends IValidator<R>, R> List<Message> doValidation(List<T> validatorsList, R objectForValidation) {
-        return validatorsList
-                .stream()
-                .filter(v -> v.getAppliableFor().isInstance(objectForValidation.getClass()))
-                .map(v -> v.validate(objectForValidation))
-                .collect(Collectors.toList());
+        List<Message> messages = new ArrayList<>();
+        for (IValidator<R> validator : validatorsList) {
+            if (objectForValidation.getClass() == validator.getAppliableFor()) {
+                Message message = validator.validate(objectForValidation);
+                messages.add(message);
+            }
+        }
+        return messages;
     }
 
     private void printValidationMessages(List<Message> messages) {

@@ -7,11 +7,9 @@ import org.nebezdari.repositories.ContractRepository;
 
 import java.io.IOException;
 
-
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
-public class CSVReaderTests {
+public class CSVReaderTest {
     private ContractRepository repository;
 
     /**

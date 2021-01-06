@@ -15,7 +15,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * Класс, для тестирования функционала класса {@link ContractRepository}
  */
-public class ContractRepositoryTests {
+public class ContractRepositoryTest {
     private ContractRepository repository;
 
     @BeforeClass
@@ -65,7 +65,7 @@ public class ContractRepositoryTests {
      * @return возвращает созданный объект класса {@link InternetContract}
      */
     private Contract createInternetContract() {
-        return InternetContract.fromKbps(1L, LocalDate.of(2020, 1, 20), LocalDate.of(2020, 6, 20), 20001L, createPerson(), 100F);
+        return InternetContract.fromKbps(1L, LocalDate.of(2020, 1, 20), LocalDate.of(2020, 6, 1), 20001L, createPerson(), 100F);
     }
 
     /**
@@ -73,7 +73,7 @@ public class ContractRepositoryTests {
      * @return возвращает созданный объект класса {@link MobileContract}
      */
     private Contract createMobileContract() {
-        return new MobileContract(2L, LocalDate.of(2020, 2, 1), LocalDate.of(2020, 4, 31), 20002L, createPerson(), 1000, 500, 40F);
+        return new MobileContract(2L, LocalDate.of(2020, 2, 1), LocalDate.of(2020, 4, 1), 20002L, createPerson(), 1000, 500, 40F);
     }
 
     /**
@@ -81,7 +81,7 @@ public class ContractRepositoryTests {
      * @return возвращает созданный объект класса {@link TVContract}
      */
     private Contract createTVContract() {
-        return new TVContract(3L,  LocalDate.of(2020, 6, 1), LocalDate.of(2020, 12, 31), 20003L, createPerson(), TVPackage.PREMIUM);
+        return new TVContract(3L,  LocalDate.of(2020, 6, 1), LocalDate.of(2020, 12, 1), 20003L, createPerson(), TVPackage.PREMIUM);
     }
 
     /**
@@ -115,8 +115,10 @@ public class ContractRepositoryTests {
         repository.add(mobileContract);
         repository.add(tvContract);
 
-        assertEquals(mobileContract, repository.remove(0));
         assertEquals(internetContract, repository.remove(0));
+        assertEquals(mobileContract, repository.get(0));
+        assertEquals(mobileContract, repository.remove(0));
+        assertEquals(tvContract, repository.get(0));
         assertEquals(tvContract, repository.remove(0));
     }
 
@@ -293,12 +295,12 @@ public class ContractRepositoryTests {
         Contract mobileContract = createMobileContract();
         Contract tvContract = createTVContract();
 
-        repository.add(internetContract);
-        repository.add(mobileContract);
         repository.add(tvContract);
+        repository.add(mobileContract);
+        repository.add(internetContract);
 
         repository.sort(Comparator.comparing(Contract::getId));
 
-        assertArrayEquals(new Contract[] {tvContract, mobileContract, internetContract}, repository.getAll());
+        assertArrayEquals(new Contract[] {internetContract, mobileContract, tvContract }, repository.getAll());
     }
 }
