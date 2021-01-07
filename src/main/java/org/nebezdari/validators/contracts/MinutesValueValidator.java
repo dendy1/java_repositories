@@ -1,7 +1,6 @@
 package org.nebezdari.validators.contracts;
 
 import org.nebezdari.contracts.Contract;
-import org.nebezdari.contracts.InternetContract;
 import org.nebezdari.contracts.MobileContract;
 import org.nebezdari.validators.IValidator;
 import org.nebezdari.validators.Message;

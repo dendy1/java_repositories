@@ -3,6 +3,7 @@ package org.nebezdari.repositories;
 import org.nebezdari.DI.AutoInjectable;
 import org.nebezdari.contracts.Contract;
 import org.nebezdari.sorters.*;
+import org.nebezdari.sorters.quicksort.QuickSorter;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -27,7 +28,7 @@ public class ContractRepository implements IRepository<Contract> {
 
     /** Класс сортировщика для сортировки */
     @AutoInjectable
-    private ISorter sorter = new QuickSorter();
+    private ISorter sorter;
 
     /** Указатель на последний элемент массива */
     private int pointer = 0;
@@ -233,7 +234,7 @@ public class ContractRepository implements IRepository<Contract> {
      * Функция получения значения поля {@link ContractRepository#sorter}
      * @return возвращает Объект сортировщика
      */
-    public ISorter getSorter(ISorter sorter) {
+    public ISorter getSorter() {
         return this.sorter;
     }
 

@@ -1,7 +1,8 @@
-package sorters;
+package org.nebezdari.sorters;
 
 import org.junit.*;
-import org.nebezdari.sorters.*;
+import org.nebezdari.sorters.quicksort.BubbleSorter;
+import org.nebezdari.sorters.quicksort.QuickSorter;
 
 import static org.junit.Assert.assertArrayEquals;
 

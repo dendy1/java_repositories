@@ -1,4 +1,6 @@
-package org.nebezdari.sorters;
+package org.nebezdari.sorters.quicksort;
+
+import org.nebezdari.sorters.ISorter;
 
 import java.util.Comparator;
 

@@ -13,11 +13,6 @@ import org.nebezdari.repositories.IRepository;
 import org.nebezdari.validators.IValidator;
 import org.nebezdari.validators.Message;
 import org.nebezdari.validators.Status;
-import org.nebezdari.validators.contracts.MinutesValueValidator;
-import org.nebezdari.validators.contracts.SpeedValueValidator;
-import org.nebezdari.validators.person.FullNameValueValidator;
-
-import javax.xml.validation.Validator;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
@@ -29,18 +24,17 @@ import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public class ContractCSVParser implements IParser<Contract> {
 
-    private static final List<IValidator<Contract>> contractValidatorList = new ArrayList<>();
-    private static final List<IValidator<Person>> personValidatorList = new ArrayList<>();
+    @AutoInjectable(clazz = IValidator.class)
+    private static final List<IValidator> validatorsList = new ArrayList<>();
 
-    static {
-        contractValidatorList.add(new MinutesValueValidator());
-        contractValidatorList.add(new SpeedValueValidator());
-        personValidatorList.add(new FullNameValueValidator());
+    public void addValidator(IValidator validator) {
+        validatorsList.add(validator);
     }
+
+    public List<IValidator> getValidatorsList() { return validatorsList; }
 
     private Boolean personValidation = true;
     private Boolean contractValidation = true;
@@ -116,15 +110,14 @@ public class ContractCSVParser implements IParser<Contract> {
                 try {
                     Person owner = parsePerson(repository, record);
                     if (personValidation) {
-                        if (!objectValid(personValidatorList, owner)) {
+                        if (!objectValid(validatorsList, owner)) {
                             continue;
                         }
                     }
 
                     Contract contract = parseContract(owner, record);
-
                     if (contractValidation) {
-                        if (objectValid(contractValidatorList, contract)) {
+                        if (objectValid(validatorsList, contract)) {
                             repository.add(contract);
                         }
                     }

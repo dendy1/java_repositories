@@ -4,7 +4,6 @@ import org.junit.*;
 import org.nebezdari.Gender;
 import org.nebezdari.Person;
 import org.nebezdari.contracts.*;
-import org.nebezdari.sorters.QuickSorter;
 
 import java.time.LocalDate;
 import java.util.Comparator;

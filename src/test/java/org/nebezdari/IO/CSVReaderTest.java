@@ -1,7 +1,6 @@
-package org.nebezdari;
+package org.nebezdari.IO;
 
 import org.junit.*;
-import org.nebezdari.IO.ContractCSVParser;
 import org.nebezdari.contracts.Contract;
 import org.nebezdari.repositories.ContractRepository;
 
